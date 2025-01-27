@@ -1,4 +1,37 @@
-package bankingApp;
+package Week4_CP_Phase1;
+
+public class Customer {
+
+   // Instance variables
+   private String customer_id;
+   
+   // Create new customer   
+   public Customer(String cust_id) {
+      customer_id = cust_id;   
+   }
+   
+   // Return customer data
+   public String toString() {
+      return customer_id;
+   }
+}
+
+package Week4_CP_Phase1;
+
+public class DataEntry {
+   
+   // Validation of max string length   
+   public static boolean checkMaxStringLen(String customer_id, int maxLength) {
+      boolean valid = true;
+      if (customer_id.length() > maxLength) {
+         return false;
+      } else {
+         return true;   
+      }   
+   }
+}
+
+package Week4_CP_Phase1;
 
 import java.util.Scanner;
 
