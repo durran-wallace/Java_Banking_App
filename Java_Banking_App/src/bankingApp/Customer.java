@@ -4,6 +4,7 @@ public class Customer {
 	
 	   // Instance variables
 	   private String customer_id;
+	   private String customer_ssn;
 	   private String customer_lastname;
 	   private String customer_firstname;
 	   private String customer_street;
@@ -14,8 +15,9 @@ public class Customer {
 	   
 	   
 	   // Create new customer   
-	   public Customer(String cust_id, String cust_lastname,String cust_firstname, String cust_street, String cust_city, String cust_state, String cust_zip, String cust_phone) {
+	   public Customer(String cust_id, String cust_ssn, String cust_lastname,String cust_firstname, String cust_street, String cust_city, String cust_state, String cust_zip, String cust_phone) {
 	      customer_id = cust_id;
+	      customer_ssn = cust_ssn;
 	      customer_lastname = cust_lastname;
 	      customer_firstname = cust_firstname;
 	      customer_street = cust_street;
@@ -28,6 +30,10 @@ public class Customer {
 	// Setters
 	   public void setCustomer_id(String customer_id) {
 	       this.customer_id = customer_id;
+	   }
+	   
+	   public void setCustomer_ssn(String customer_ssn) {
+		   this.customer_ssn = customer_ssn;
 	   }
 
 	   public void setCustomer_lastname(String customer_lastname) {
@@ -61,6 +67,10 @@ public class Customer {
 	   // Getters
 	   public String getCustomer_id() {
 	       return customer_id;
+	   }
+	   
+	   public String getCustomer_ssn() {
+		   return customer_ssn;
 	   }
 
 	   public String getCustomer_lastname() {
