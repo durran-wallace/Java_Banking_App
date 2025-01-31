@@ -48,16 +48,39 @@ public class DataEntry {
     }
 		
 	// Validation of int data with range limit
-	
+	public static boolean checkIntWithRange(String input, int min, int max) {
+	    try {
+	        int number = Integer.parseInt(input);
+	        return number >= min && number <= max;
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
+	}
 	
 	// Validation of decimal data
-	
+	public static boolean checkDecimal(String input) {
+	    try {
+	        Double.parseDouble(input);
+	        return true;
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
+	}
 	
 	// Validation of decimal data with range limit
-	
+	public static boolean checkDecimalWithRange(String input, double min, double max) {
+	    try {
+	        double number = Double.parseDouble(input);
+	        return number >= min && number <= max;
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
+	}
 	
 	// Validation of date input
-	
+	public static boolean checkDate(String input) {
+	    return input.matches("\\\\d{2}/\\\\d{2}/\\\\d{4}");
+	}
 	
 	// Validation of state abbreviation
 	public static boolean checkState(String input) {
