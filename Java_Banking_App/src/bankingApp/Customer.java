@@ -27,7 +27,7 @@ public class Customer {
 	      customer_phone = cust_phone;
 	   }
 	   
-	// Setters
+	   // Setters
 	   public void setCustomer_id(String customer_id) {
 	       this.customer_id = customer_id;
 	   }
