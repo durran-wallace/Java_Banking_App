@@ -1,5 +1,8 @@
 package bankingApp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Customer {
 	
 	   // Instance variables
@@ -12,6 +15,7 @@ public class Customer {
 	   private String customer_state;
 	   private String customer_zip;
 	   private String customer_phone;
+	   private List<Account> accounts;
 	   
 	   
 	   // Create new customer   
@@ -25,6 +29,7 @@ public class Customer {
 	      customer_state = cust_state;
 	      customer_zip = cust_zip;
 	      customer_phone = cust_phone;
+	      this.accounts = new ArrayList<>();
 	   }
 	   
 	   // Setters
@@ -63,7 +68,12 @@ public class Customer {
 	   public void setCustomer_phone(String customer_phone) {
 	       this.customer_phone = customer_phone;
 	   }
-
+	   
+	   public void setAccounts(List<Account> accounts) {
+		   this.accounts = accounts;
+	   }
+	   
+	   
 	   // Getters
 	   public String getCustomer_id() {
 	       return customer_id;
@@ -99,6 +109,10 @@ public class Customer {
 
 	   public String getCustomer_phone() {
 	       return customer_phone;
+	   }
+	   
+	   public List<Account> getAccounts(){
+		   return accounts;
 	   }
 	   
 	   // Return customer data
