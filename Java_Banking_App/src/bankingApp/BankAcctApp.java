@@ -1,6 +1,7 @@
 package bankingApp;
 
 import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -72,7 +73,7 @@ public class BankAcctApp {
 	    		}
 	    	}
 	      
-	      //Get last name of new customer
+	      // Get last name of new customer
 	      valid_data = false;
 	      String cust_lastname = "";
 	      while(!valid_data) {
@@ -192,181 +193,214 @@ public class BankAcctApp {
 		  boolean addingAccounts = true;
 			
 		  while (addingAccounts) {
-			    
-				// Prompt to add account or exit loop
-				boolean validAccountData = false;
-				while (!validAccountData) {    		  
-					  try {	    	  
-			          System.out.print("Would you like to enter a new account for this customer? (y/n): ");
-			          String response = input.nextLine().toLowerCase();
-			          
-			          // Validate input
-			          if (!response.equals("n") && !response.equals("y")) {
-			              throw new IllegalArgumentException("Input must be 'y' or 'n'.");
-			          } 
-			          
-			          validAccountData = true;
-			          
-			          if (response.equals("n")) {
-			        	  addingAccounts = false;
-			        	  break;
-			          }
-					  
-					  } catch (IllegalArgumentException e) {
-				          System.out.println("Error: " + e.getMessage());
-					  }    		  
-				}
-				
-				if (!addingAccounts) {
-					break;
-				}
-				
-				// Add account number
-				validAccountData = false;		
-			    String account_num = "";
-			    while (!validAccountData) {
-			        try {
-			            System.out.print("Enter Account Number (non-blank, must be exactly 5 characters): ");
-			            account_num = input.nextLine();
-			            if (account_num.length() == 0 || !DataEntry.checkMaxStringLen(account_num, 5) || !DataEntry.checkNumString(account_num)) {
-			                throw new IllegalArgumentException("Account number cannot be blank and must contain a maximum of 5 numeric characters.");
-			            }
-			            validAccountData = true;
-			        } catch (IllegalArgumentException e) {
-			            System.out.println("Error: " + e.getMessage());
-			        }
-			    }
-			    
-			    // Add account type
-			    validAccountData = false;
-			    String acct_type = "";
-			    while(!validAccountData) {
-			    	try {
-			    		System.out.println("Enter Account Type ('CHK' or 'SAV').");
-			    		acct_type = input.nextLine().toLowerCase();
-			    		
-			    		// Validate input
-			    		if (!acct_type.equals("chk") && (!acct_type.equals("sav"))) {
-			    			throw new IllegalArgumentException("Must input either 'CHK' or 'SAV'");
-			    		}
-			    		validAccountData = true;
-			    	} catch (IllegalArgumentException e) {
-			    		System.out.println("Error: " + e.getMessage());
-			    	}
-			    }
-			    
-			    // Add service fee
-			    validAccountData = false;
-			    double svc_fee = 0.0;
-			    while(!validAccountData) {
-			    	try {
-			    		System.out.println("Enter Service Fee (0.00 - 10.00).");
-			    		String svc_input = input.nextLine();
-			    		svc_fee = Double.parseDouble(svc_input);
-			    		
-			    		// Validate input
-			    		if (!DataEntry.checkDecimal(svc_input) || !DataEntry.checkDecimalWithRange(svc_input, 0.0, 10.0)) {
-			    			throw new IllegalArgumentException("Must enter a number between 0.00 and 10.00");
-			    		}
-			    		validAccountData = true;
-			    	} catch (IllegalArgumentException e) {
-			    		System.out.println("Error: " + e.getMessage());
-			    	}
-			    }
-			    
-			    // Add interest rate
-			    validAccountData = false;
-			    double interest_rt = 0.0;
-			    while(!validAccountData) {
-			    	try {
-			    		System.out.println("Enter Interest Rate (0.00 - 10.00).");
-			    		String interest_input = input.nextLine();
-			    		interest_rt = Double.parseDouble(interest_input);
-			    		
-			    		// Validate input
-			    		if (!DataEntry.checkDecimal(interest_input) || !DataEntry.checkDecimalWithRange(interest_input, 0.0, 10.0)) {
-			    			throw new IllegalArgumentException("Must enter a number between 0.00 and 10.00");
-			    		}
-			    		validAccountData = true;
-			    	} catch (IllegalArgumentException e) {
-			    		System.out.println("Error: " + e.getMessage());
-			    	}
-			    }
-			    
-			    // Add overdraft fee
-			    validAccountData = false;
-			    double ovrdrft_fee = 0.0;
-			    while(!validAccountData) {
-			    	try {
-			    		System.out.println("Enter Overdraft Fee.");
-			    		String ovrdrft_input = input.nextLine();
-			    		ovrdrft_fee = Double.parseDouble(ovrdrft_input);
-			    		
-			    		// Validate input
-			    		if (!DataEntry.checkDecimal(ovrdrft_input)) {
-			    			throw new IllegalArgumentException("Must enter a number.");
-			    		}
-			    		validAccountData = true;
-			    	} catch (IllegalArgumentException e) {
-			    		System.out.println("Error: " + e.getMessage());
-			    	}
-			    }
-			    
-			    // Add balance
-			    validAccountData = false;
-			    double bal = 0.0;
-			    while(!validAccountData) {
-			    	try {
-			    		System.out.println("Enter account balance.");
-			    		String balance_input = input.nextLine();
-			    		
-			    		bal = Double.parseDouble(balance_input);
-			    					    		
-			    		// Validate input
-			    		if (!DataEntry.checkDecimal(balance_input)) {
-			    			throw new IllegalArgumentException("Must enter a number.");
-			    		}
-			    		validAccountData = true;
-			    	} catch (IllegalArgumentException e) {
-			    		System.out.println("Error: " + e.getMessage());
-			    	}
-			    }
-			    
-			    // Create and add the account
-			    Account newAccount = new Account(account_num, acct_type,svc_fee,interest_rt, ovrdrft_fee, bal);
-			    accounts.add(newAccount);					    
-			}
-			
-			// Attach accounts to the customer
-			newCustomer.setAccounts(accounts);
+		      // Step 1: Prompt to add an account
+		      boolean validAccountInput = false;
+		      String accountChoice = "";
+
+		      while (!validAccountInput) {
+		          try {
+		              System.out.print("Would you like to enter a new account for this customer? (y/n): ");
+		              accountChoice = input.nextLine().trim().toLowerCase();
+
+		              if (!accountChoice.equals("y") && !accountChoice.equals("n")) {
+		                  throw new IllegalArgumentException("Invalid input. Please enter 'y' or 'n'.");
+		              }
+		              validAccountInput = true;
+		          } catch (IllegalArgumentException e) {
+		              System.out.println("Error: " + e.getMessage());
+		          }
+		      }
+
+		      // If the user selects "no", exit to adding another customer
+		      if (accountChoice.equals("n")) {
+		          break;
+		      }
+
+		      // Step 2: Collect Account Details
+		      valid_data = false;
+		      String account_num = "";
+		      while(!valid_data) {
+		    	  try {
+		    		  // Get account number for new account
+		    	      System.out.print("Enter Account Number (5 characters max) ");
+		    	      account_num = input.nextLine();
+		    	      if (account_num.length() == 0 || !DataEntry.checkMaxStringLen(account_num, 5)) {
+		    	    	  throw new IllegalArgumentException("Account number cannot be blank and must contain a maximum of 5 characters");
+		    	      }
+		    	      valid_data = true;
+		    	  } catch (IllegalArgumentException e) {
+		    		  System.out.println("Error: " + e.getMessage());
+		    	  }
+		      }
+
+		      String acct_type = "";
+		      while (true) {
+		          try {
+		              System.out.print("Enter Account Type ('CHK' or 'SAV'): ");
+		              acct_type = input.nextLine().trim().toUpperCase();
+		              if (!acct_type.equals("CHK") && !acct_type.equals("SAV")) {
+		                  throw new IllegalArgumentException("Must input either 'CHK' or 'SAV'.");
+		              }
+		              break;
+		          } catch (IllegalArgumentException e) {
+		              System.out.println("Error: " + e.getMessage());
+		          }
+		      }
+
+		      Account newAccount;
+		      if (acct_type.equals("CHK")) {
+		          newAccount = new CheckingAccount(account_num);
+		      } else {
+		          newAccount = new SavingsAccount(account_num);
+		      }
+
+		      accounts.add(newAccount);
+		      newCustomer.setAccounts(accounts);  // Attach accounts to customer immediately
+
+		      // Step 3: Process Transactions After Adding an Account
+		      boolean makingTransactions = true;
+		      while (makingTransactions) {
+		          boolean validTransactionInput = false;
+		          String transactionChoice = "";
+
+		          while (!validTransactionInput) {
+		              try {
+		                  System.out.print("Would you like to make a transaction for this account? (y/n): ");
+		                  transactionChoice = input.nextLine().trim().toLowerCase();
+
+		                  if (!transactionChoice.equals("y") && !transactionChoice.equals("n")) {
+		                      throw new IllegalArgumentException("Invalid input. Please enter 'y' or 'n'.");
+		                  }
+		                  validTransactionInput = true;
+		              } catch (IllegalArgumentException e) {
+		                  System.out.println("Error: " + e.getMessage());
+		              }
+		          }
+
+		          // If the user selects "no", exit transactions and go back to adding another account
+		          if (transactionChoice.equals("n")) {
+		        	  if (newAccount.getBalance() > 0) {
+			        	  newAccount.setBalance(newAccount.getBalance() * (1 + newAccount.getInterest_rate()));
+			        	  System.out.println("\nApplying " + newAccount.getInterest_rate() + "% earned interest.");
+			        	  System.out.println("\nNew balance with accrued interest: " + newAccount.getBalance() + "\n");
+			              break;
+		        	  } else {
+		        		  System.out.println("\nNo interest accrued. Current balance is: " + newAccount.getBalance() + "\n");
+		        		  break;
+		        	  }
+		          }
+
+		          // Ask for Transaction Type (DEP or WTH)
+		          boolean validTransactionType = false;
+		          String transactionType = "";
+
+		          while (!validTransactionType) {
+		              try {
+		                  System.out.print("Enter transaction type (DEP/WTH): ");
+		                  transactionType = input.nextLine().trim().toUpperCase();
+
+		                  if (!transactionType.equals("DEP") && !transactionType.equals("WTH")) {
+		                      throw new IllegalArgumentException("Invalid transaction type. Please enter 'DEP' or 'WTH'.");
+		                  }
+		                  validTransactionType = true;
+		              } catch (IllegalArgumentException e) {
+		                  System.out.println("Error: " + e.getMessage());
+		              }
+		          }
+
+		          // Step 5: Ask for Transaction Amount
+		          boolean validAmount = false;
+		          double amount = 0.0;
+
+		          while (!validAmount) {
+		              try {
+		                  System.out.print("Enter transaction amount: ");
+		                  String amountInput = input.nextLine();
+		                  amount = Double.parseDouble(amountInput);
+
+		                  if (amount <= 0) {
+		                      throw new IllegalArgumentException("Transaction amount must be greater than zero.");
+		                  }
+
+		                  validAmount = true;
+		              } catch (NumberFormatException e) {
+		                  System.out.println("Error: Invalid number format. Please enter a valid numeric amount.");
+		              } catch (IllegalArgumentException e) {
+		                  System.out.println("Error: " + e.getMessage());
+		              }
+		          }
+
+		          // Step 6: Process Transaction
+		          if (transactionType.equals("DEP")) {
+		              newAccount.deposit(amount);
+		          } else if (transactionType.equals("WTH")) {
+		              newAccount.withdrawal(amount);
+		          }
+
+		          // Step 7: Display Formatted Transaction Details
+		          System.out.println("\nTransaction Details:");
+		          System.out.printf("%-15s %-15s %-10s %-15s %-10s %-10s %-15s %-10s%n",
+		                            "Customer ID", "Account No.", "Type", "Date", "Txn Type", "Amount", "Fees", "Balance");
+		          System.out.printf("%-15s %-15s %-10s %-15s %-10s $%-9.2f $%-14.2f $%-9.2f%n",
+		                            newCustomer.getCustomer_id(),
+		                            newAccount.getAccount_number(),
+		                            newAccount.getAccount_type(),
+		                            LocalDate.now(),
+		                            transactionType,
+		                            amount,
+		                            newAccount.getService_fee(),
+		                            newAccount.getBalance());
+
+		          System.out.println("\nUpdated Balance: $" + newAccount.getBalance() + "\n");
+		      }
+		  }
+
+
 	      
 	      // Add new customer to customer array list
 	      customers.add(newCustomer);
 	      
 	      // Display created customer data
-	      System.out.println("\nCustomer data: \n\ncustomer_id: " + newCustomer.getCustomer_id() + 
-	    		  "\nCustomer_ssn: " + newCustomer.getCustomer_ssn() + 
-	    		  "\nCustomer_lastname: " + newCustomer.getCustomer_lastname() + 
-	    		  "\nCustomer_firstname: " + newCustomer.getCustomer_firstname() + 
-	    		  "\nCustomer_address: " + newCustomer.getCustomer_street() + 
-	    		  "\nCustomer_city: " + newCustomer.getCustomer_city() + 
-	    		  "\nCustomer_state: " + newCustomer.getCustomer_state() + 
-	    		  "\nCustomer_zip: " + newCustomer.getCustomer_zip() + 
-	    		  "\nCustomer_phone: " + newCustomer.getCustomer_phone());
+	      System.out.println("\nCustomer Data:");
+	      System.out.printf("%-20s %-20s %-20s %-20s %-20s%n", 
+	                        "Customer ID", "SSN", "Last Name", "First Name", "Address");
+	      System.out.printf("%-20s %-20s %-20s %-20s %-20s%n", 
+	                        newCustomer.getCustomer_id(), 
+	                        newCustomer.getCustomer_ssn(), 
+	                        newCustomer.getCustomer_lastname(), 
+	                        newCustomer.getCustomer_firstname(), 
+	                        newCustomer.getCustomer_street());
+	      System.out.println("");
+	      System.out.printf("%-20s %-20s %-20s %-20s%n", 
+	                        "City", "State", "Zip", "Phone");
+	      System.out.printf("%-20s %-20s %-20s %-20s%n", 
+	                        newCustomer.getCustomer_city(), 
+	                        newCustomer.getCustomer_state(), 
+	                        newCustomer.getCustomer_zip(), 
+	                        newCustomer.getCustomer_phone());
+
 	      // Display customer accounts
 	      if (newCustomer.getAccounts().isEmpty()) {
 	    	    System.out.println("No accounts available.");
 	    	} else {
 	    	    for (Account acct : newCustomer.getAccounts()) {
-	    	        System.out.println("\nAccount data: \n\nAccount Number: " + acct.getAccount_number() +
-	    	                           "\nAccount Type: " + acct.getAccount_type() +
-	    	                           "\nService Fee: $" + acct.getService_fee() +
-	    	                           "\nInterest Rate: " + acct.getInterest_rate() + "%" +
-	    	                           "\nOverdraft Fee: $" + acct.getOverdraft_fee() +
-	    	                           "\nBalance: $" + acct.getBalance() + "\n");
+	    	    	System.out.println("\nAccount Data:");
+
+	    	    	System.out.printf("%-20s %-15s %-15s %-15s %-15s %-15s%n", 
+	    	    	                  "Account Number", "Account Type", "Service Fee", "Interest Rate", "Overdraft Fee", "Balance");
+
+	    	    	System.out.printf("%-20s %-15s $%-14.2f %-15.2f $%-14.2f $%-14.2f%n", 
+	    	    	                  acct.getAccount_number(), 
+	    	    	                  acct.getAccount_type(), 
+	    	    	                  acct.getService_fee(), 
+	    	    	                  acct.getInterest_rate(), 
+	    	    	                  acct.getOverdraft_fee(), 
+	    	    	                  acct.getBalance());
+	    	    	System.out.println("");
+
 	    	    }
 	    	}
-      }
+      	  }
       // Close Scanner object
       input.close();
    }

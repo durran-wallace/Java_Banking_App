@@ -1,6 +1,6 @@
 package bankingApp;
 
-public class Account {
+public abstract class Account implements AccountInterface{
 
 	// Instance Variables
 	private String account_number;
@@ -12,14 +12,23 @@ public class Account {
 	
 	// Create new account
 	public Account(String account_num, String acct_type, double svc_fee, double interest_rt, double ovrdrft_fee, double bal) {
-		account_number = account_num;
-		account_type = acct_type;
-		service_fee = svc_fee;
-		interest_rate = interest_rt;
-		overdraft_fee = ovrdrft_fee;
-		balance = bal;
+		this.account_number = account_num;
+		this.account_type = acct_type;
+		this.service_fee = svc_fee;
+		this.interest_rate = interest_rt;
+		this.overdraft_fee = ovrdrft_fee;
+		this.balance = bal;
 		
 	}
+	
+	@Override
+    public abstract void withdrawal(double amount);
+
+    @Override
+    public abstract void deposit(double amount);
+
+    @Override
+    public abstract double balance();
 	
 	// Setter methods
 	public void setAccount_number(String account_number) {
