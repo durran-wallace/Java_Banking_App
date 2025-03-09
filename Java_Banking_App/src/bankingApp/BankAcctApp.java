@@ -57,7 +57,7 @@ public class BankAcctApp {
 	    	  }
 	      }
 	     
-	   // Get ssn for new customer 
+	   // Get SSN for new customer 
 	     valid_data = false;
 	     String cust_ssn = "";
 	     while(!valid_data) {

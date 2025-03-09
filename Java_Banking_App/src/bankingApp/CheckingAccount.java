@@ -16,9 +16,10 @@ public class CheckingAccount extends Account implements AccountInterface{
 	
 	@Override
 	public void deposit(double amount) {
-//		if (amount > 0) {
+		if (amount > 0) {
 			setBalance(getBalance() + amount - getService_fee());
 			recordTransaction("DEP", amount);
+		}
 	}
 	@Override
 	public void withdrawal(double amount) {

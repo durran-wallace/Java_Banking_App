@@ -79,7 +79,7 @@ public class DataEntry {
 	
 	// Validation of date input
 	public static boolean checkDate(String input) {
-	    return input.matches("\\\\d{2}/\\\\d{2}/\\\\d{4}");
+	    return input.matches("\\d{2}/\\d{2}/\\d{4}");
 	}
 	
 	// Validation of state abbreviation
