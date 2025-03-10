@@ -304,6 +304,7 @@ public class BankAcctGUI extends JFrame {
             String customerID = txtCustomerID.getText().trim();
             String transactionDate = txtTransactionDate.getText().trim();
             double amount;
+            double interestEarned = 0.0;
             String transactionType = rdoDeposit.isSelected() ? "DEP" : "WTH";
 
             // Validate Transaction Date (MM/DD/YYYY)
@@ -335,9 +336,15 @@ public class BankAcctGUI extends JFrame {
                         double previousBalance = account.getBalance();
                         double serviceFee = account.getService_fee();
                         double overdraftFee = 0.0;
+                        double interestRate = account.getInterest_rate();
                         boolean isOverdraft = false;
                         boolean isInsufficientFunds = false;
-
+                        
+                     // Calculate and Apply Interest (Only if balance is positive)
+                        if (!isInsufficientFunds && account.getBalance() > 0) {                            
+                            interestEarned = account.getBalance() * (interestRate/100);
+                        }
+                        
                         // Process Transaction
                         if (transactionType.equals("DEP")) {
                             account.deposit(amount);
@@ -352,7 +359,7 @@ public class BankAcctGUI extends JFrame {
                                 account.withdrawal(amount);
                             }
                         }
-
+                        
                         // Display Transaction Result
                         if (isInsufficientFunds) {
                             lblStatus.setText("Error: Insufficient funds. Transaction cancelled.");
@@ -367,6 +374,7 @@ public class BankAcctGUI extends JFrame {
                                     + "Transaction Amount: $" + amount + "\n"
                                     + "Service Fee: $" + serviceFee + "\n"
                                     + (isOverdraft ? "Overdraft Fee: $" + overdraftFee + "\n" : "")
+                                    + "Interest Earned: " + interestEarned + "\n"
                                     + "New Balance: $" + account.getBalance());
                         }
                         return;

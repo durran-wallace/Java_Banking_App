@@ -15,14 +15,14 @@ public class SavingsAccount extends Account implements AccountInterface {
 	
 	@Override
 	public void deposit(double amount) {
-			setBalance(getBalance() + amount - getService_fee());
-			recordTransaction("DEP", amount);
+		setBalance((getBalance() * (1 + (INTEREST_RATE/100))) + (amount - getService_fee()));
+		recordTransaction("DEP", amount);
 	}
 	@Override
 	public void withdrawal(double amount) {
 
-	    double currentBalance = getBalance();
-	    double newBalance = currentBalance - (amount + getService_fee());
+		double currentBalance = getBalance();
+	    double newBalance = ((currentBalance * (1 + (INTEREST_RATE/100))) - (amount + getService_fee()));
 
 	    // Check if there are sufficient funds
 	    if (newBalance >= 0) {
